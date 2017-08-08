@@ -1,0 +1,57 @@
+body {
+	color: #6052fe;             /* text color, also below.  blue*/
+	background-color: #9BB198;  /*main page background color. GREY */
+}
+header {
+	text-align: center;
+	font-size: 35;
+	border: 3px solid black;
+	border-radius: 5px;
+    background-color: #51fe38;  /*inside of title box background color.  should be same as button background color.*/
+}
+img {
+	border: 1px solid black;
+	display: block;
+    margin: 0 auto;
+
+}
+nav.menu{
+	/*      color: yellow;       does nothing ??   */
+	text-align: center;
+}
+li.menu-item{
+	margin: 20px;
+	list-style: none;
+}
+li.bull{
+	list-style-position: inside;
+	background-color: #51fe38; 	/*inside of list item box background color.  should be same as others.*/
+	border: 3px solid black;
+	border-radius: 5px;
+	margin: 20px;
+	padding: 5px 10px;  /*top then side.  i think. */
+}
+p.bull{
+	background-color: #51fe38; 	/*inside of paragraph item box background color.  should be same as others.*/
+	border: 3px solid black;
+	border-radius: 5px;
+	margin: 20px;
+	padding: 5px 10px;  /*top then side.  i think. */
+
+}
+a:link, a:visited{
+	color: #6052fe;             /* text color, also above.  blue*/
+    background-color: #51fe38;  /*inside of button box background color.  should be same as title background color.*/
+	text-decoration: none;
+	padding: 5px 10px;          /*top then side.  i think. */
+}
+a:hover, a:active{              /*MOUSE OVER COLORS*/
+	color: #cb7743;             /*mouse over text.   dull orangeish*/
+	background-color: #ff8d45;  /*mouse over background  bright orangeish*/
+}
+a.menu-item-link{
+	border: 2px solid black;
+	border-radius: 5px;
+}
+
+
