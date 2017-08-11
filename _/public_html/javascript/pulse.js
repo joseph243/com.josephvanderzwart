@@ -1,20 +1,23 @@
-function pulse1(){
-	document.getElementById("pulse").style.borderColor = white;
-	sleep(1000);
-	document.getElementById("pulse").style.borderColor = black;
+<!--
+
+function test (){
+	alert("hello world");
 };
 
+function less (){
+	document.getElementById("flashing").border= "1px solid black";
+}
 
+function more (){
+	document.getElementById("flashing").border= "3px solid black";
+}
 
+function flash (){
+	less;
+	setTimeout(more,50);
+}
 
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
-    }
-  }
-};
-
-
-setInterval(pulse1(), 1000);  
+function flashy (){
+	setInterval(flash,50);
+}
+//-->
