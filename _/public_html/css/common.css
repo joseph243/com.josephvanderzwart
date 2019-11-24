@@ -1,19 +1,47 @@
 body {
 	color: #6052fe;             /* text color, also below.  blue*/
 	background-color: #9BB198;  /*main page background color. GREY */
+	font: 13px arial, sans-serif;
 }
 header {
 	text-align: center;
-	font-size: 35;
 	border: 3px solid black;
 	border-radius: 5px;
     background-color: #51fe38;  /*inside of title box background color.  should be same as button background color.*/
+	font: 16px arial, sans-serif;
 }
 img {
 	border: 1px solid black;
 	display: block;
     margin: 0 auto;
-
+}
+button {
+	background-color: #51fe38; 	/*inside of list item box background color.  should be same as others.*/
+	border: 2px solid black;
+	border-radius: 5px;
+	padding: 5px 10px;  /*top then side. */
+	color: #6052fe;             /* text color, also below.  blue*/
+	font: 13px arial, sans-serif;
+	margin-top: -20px;
+	margin-bottom: 0px;   /*wtf*/
+}
+button:link, button:visited{
+	color: #6052fe;             /* text color, also above.  blue*/
+    background-color: #51fe38;  /*inside of button box background color.  should be same as title background color.*/
+	text-decoration: none;
+	padding: 5px 10px;          /*top then side.  i think. */
+}
+button:hover, button:active{              /*MOUSE OVER COLORS*/
+	color: #cb7743;             /*mouse over text.   dull orangeish*/
+	background-color: #ff8d45;  /*mouse over background  bright orangeish*/
+	cursor: pointer;
+}
+.greenbox {
+	background-color: #51fe38; 	/*inside of list item box background color.  should be same as others.*/
+	border: 2px solid black;
+	border-radius: 5px;
+	padding: 5px 10px;  /*top then side. */
+	font: 13px arial, sans-serif;
 }
 nav.menu{
 	/*      color: yellow;       does nothing ??   */
@@ -22,22 +50,6 @@ nav.menu{
 li.menu-item{
 	margin: 20px;
 	list-style: none;
-}
-li.bull{
-	list-style-position: inside;
-	background-color: #51fe38; 	/*inside of list item box background color.  should be same as others.*/
-	border: 3px solid black;
-	border-radius: 5px;
-	margin: 20px;
-	padding: 5px 10px;  /*top then side.  i think. */
-}
-p.bull{
-	background-color: #51fe38; 	/*inside of paragraph item box background color.  should be same as others.*/
-	border: 3px solid black;
-	border-radius: 5px;
-	margin: 20px;
-	padding: 5px 10px;  /*top then side.  i think. */
-
 }
 a:link, a:visited{
 	color: #6052fe;             /* text color, also above.  blue*/
@@ -53,5 +65,24 @@ a.menu-item-link{
 	border: 2px solid black;
 	border-radius: 5px;
 }
-
-
+a.sublink{
+	border: 2px solid black;
+	border-radius: 5px;
+}
+a.sublink:link, a.sublink:visited{
+	color: #6052fe;             /* text color, also above.  blue*/
+    background-color: #E6E33A;  /*different color for sublink. yellow. */
+	text-decoration: none;
+	padding: 5px 10px;          /*top then side.  i think. */
+}
+a.sublink:hover, a.sublink:active{
+	color: #cb7743;             /*mouse over text.   dull orangeish*/
+	background-color: #ff8d45;  /*mouse over background  bright orangeish*/
+}
+.expander{
+	
+}
+.expandable{
+	display:none;  				/*items hidden by default*/
+	overflow:hidden;	
+}
