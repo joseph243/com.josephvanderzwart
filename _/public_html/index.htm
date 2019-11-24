@@ -7,13 +7,12 @@
       <link rel="stylesheet" href="css/common.css" />
       <link rel="stylesheet" href="css/responsive.css" />
 	  <link rel="icon" type="image/png" href="favicon.png">
-	  <script src="javascript/pulse.js"></script>
   </head>
 
   <body>
      <header>
       <div id="banner" role="banner"></div>
-      <h1 onclick=test();>Welcome to josephvanderzwart.com</h1>
+      <h1>josephvanderzwart.com</h1>
     </header>
     <nav class="menu">
 	  <ul class="menu-list">
@@ -24,18 +23,46 @@
 		  <a class="menu-item-link" href="https://www.github.com/joseph243" alt="Github" target="_blank">My Github Profile</a>
 		</li>
 	    <li class="menu-item">
-		  <a class="menu-item-link" href="pictures.htm" alt="Pictures" id="flashing">Pictures</a>
+		  <a class="menu-item-link" href="pictures.htm" alt="Pictures">Pictures</a>
+		</li>
+		<li class="menu-item">
+		  <button class="menu-item-link expander" href="   " alt="Social Media" target="_blank">My Social Media &nbsp;&nbsp;&nbsp;&nbsp; >></button>
+		    <span class="expandable">
+			  <br />			
+			  <a class="sublink" href="https://www.facebook.com/joseph.vanderzwart" alt="Facebook" target="_blank">Facebook</a>
+			  <a class="sublink" href="https://www.linkedin.com/in/joseph-vanderzwart-804919165/" alt="LinkedIn" target="_blank">LinkedIn</a>
+			  <br />
+			  <br />
+			</span>
 		</li>
       </ul>
 	</nav>
 	
+	
     <p>The website serves many purposes:</p>
 	<ol>
 	  <li>to register my own domain name because Vanderzwart.com is taken. :'(</li>
-	  <li>to experiment with web design via CSS and javascript</li>
-	  <li>to display and track progress for my coding projects</li>
-	  <li>to share photos</li>
+	  <li>to share photos and coding projects</li>
 	  <li>to discover the ugliest combination of colors possible in HTML through trial and error</li>
 	</ol>
+	
+	
+<script>  /*Expandable Buttons*/
+var exp = document.getElementsByClassName("expander");
+var i;
+
+for (i = 0; i < exp.length; i++) {
+  exp[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var expander = this.nextElementSibling;
+    if (expander.style.display === "block") {
+      expander.style.display = "none";
+    } else {
+      expander.style.display = "block";
+    }
+  });
+}
+</script>	
+	
   </body>
 </html>
