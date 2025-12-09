@@ -1,5 +1,5 @@
 body {
-	color: #6052fe;             /* text color, also below.  blue*/
+	color: #063970;             /* text color, also below.  blue*/
 	background-color: #9BB198;  /*main page background color. GREY */
 	font: 13px arial, sans-serif;
 }
@@ -20,13 +20,13 @@ button {
 	border: 2px solid black;
 	border-radius: 5px;
 	padding: 5px 10px;  /*top then side. */
-	color: #6052fe;             /* text color, also below.  blue*/
+	color: #063970;             /* text color, also below.  blue*/
 	font: 13px arial, sans-serif;
 	margin-top: -20px;
 	margin-bottom: 0px;   /*wtf*/
 }
 button:link, button:visited{
-	color: #6052fe;             /* text color, also above.  blue*/
+	color: #063970;             /* text color, also above.  blue*/
     background-color: #51fe38;  /*inside of button box background color.  should be same as title background color.*/
 	text-decoration: none;
 	padding: 5px 10px;          /*top then side.  i think. */
@@ -52,7 +52,7 @@ li.menu-item{
 	list-style: none;
 }
 a:link, a:visited{
-	color: #6052fe;             /* text color, also above.  blue*/
+	color: #063970;             /* text color, also above.  blue*/
     background-color: #51fe38;  /*inside of button box background color.  should be same as title background color.*/
 	text-decoration: none;
 	padding: 5px 10px;          /*top then side.  i think. */
@@ -70,7 +70,7 @@ a.sublink{
 	border-radius: 5px;
 }
 a.sublink:link, a.sublink:visited{
-	color: #6052fe;             /* text color, also above.  blue*/
+	color: #063970;             /* text color, also above.  blue*/
     background-color: #E6E33A;  /*different color for sublink. yellow. */
 	text-decoration: none;
 	padding: 5px 10px;          /*top then side.  i think. */
@@ -85,4 +85,18 @@ a.sublink:hover, a.sublink:active{
 .expandable{
 	display:none;  				/*items hidden by default*/
 	overflow:hidden;	
+}
+#padtext {
+    padding-right: 150px;
+    padding-left: 150px;
+    padding-top: 10px;
+}
+
+.column {
+    float: left;
+    width: 25%;
+}
+.column5 {
+    float: left;
+    widtch: 20%;
 }
