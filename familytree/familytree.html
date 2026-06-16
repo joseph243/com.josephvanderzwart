@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Tree</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:       #fdf6ec;
+    --parchment:   #f0e6d3;
+    --warm-tan:    #c9a97a;
+    --deep-brown:  #5c3d2e;
+    --bark:        #3a2518;
+    --moss:        #6b7c5c;
+    --sage:        #a3b899;
+    --blush:       #e8c9b0;
+    --shadow:      rgba(58, 37, 24, 0.15);
+    --node-w:      180px;
+    --node-hover:  #fff9f2;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--cream);
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(201,169,122,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 90%, rgba(107,124,92,0.12) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='1' fill='%23c9a97a' fill-opacity='0.15'/%3E%3C/svg%3E");
+    font-family: 'Lato', sans-serif;
+    color: var(--deep-brown);
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+  }
+
+  /* ── Header ── */
+  header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    color: var(--bark);
+    line-height: 1.1;
+  }
+  header h1 em { font-style: italic; color: var(--moss); }
+  header .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--warm-tan);
+    margin-top: 6px;
+    letter-spacing: 0.12em;
+  }
+  .header-rule {
+    display: flex; align-items: center; gap: 16px;
+    max-width: 420px; margin: 18px auto 0;
+  }
+  .header-rule::before, .header-rule::after {
+    content: ''; flex: 1;
+    height: 1px; background: linear-gradient(to right, transparent, var(--warm-tan), transparent);
+  }
+  .header-rule span { font-size: 1.2rem; color: var(--warm-tan); }
+
+  /* ── Photo preview ── */
+  #photo-preview {
+    position: fixed;
+    top: 50%;
+    right: 32px;
+    transform: translateY(-50%) scale(0.88);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease, transform 0.28s ease;
+    z-index: 100;
+    background: var(--cream);
+    border: 2px solid var(--warm-tan);
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 12px 48px var(--shadow);
+    width: 220px;
+  }
+  #photo-preview.visible {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+  #photo-preview img {
+    width: 100%; height: 200px;
+    object-fit: cover;
+    border-radius: 3px;
+    display: block;
+  }
+  #photo-preview .photo-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-style: italic;
+    text-align: center;
+    margin-top: 8px;
+    color: var(--deep-brown);
+  }
+  #photo-preview .photo-years {
+    font-size: 0.72rem;
+    text-align: center;
+    color: var(--warm-tan);
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+
+  /* ── Tree layout ── */
+  .tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .generation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .gen-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.82rem;
+    letter-spacing: 0.18em;
+    color: var(--sage);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .gen-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 0 10px;
+  }
+
+  /* ── Connector lines ── */
+  .connector {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    position: relative;
+    height: 52px;
+    margin: 0;
+  }
+  /* The vertical drop line from child up */
+
+.connector .stem {
+  position: absolute;
+  top: 0;
+  left: var(--stem-x);
+  transform: translateX(-50%);
+  width: 2px;
+  height: 26px;
+  background: linear-gradient(to bottom, var(--warm-tan), var(--blush));
+}
+
+
+  /* The horizontal bar */
+.connector .h-bar {
+  position: absolute;
+  top: 26px;
+  height: 2px;
+  background: linear-gradient(to right, var(--blush), var(--warm-tan), var(--blush));
+  left: var(--bar-left);
+  width: var(--bar-width);   /* swap --bar-right for --bar-width */
+}
+  /* Drops from the bar down to each parent */
+  .connector .drop {
+    position: absolute;
+    top: 26px;
+    width: 2px;
+    height: 26px;
+    background: linear-gradient(to bottom, var(--blush), var(--warm-tan));
+    left: var(--drop-x);
+    transform: translateX(-50%);
+  }
+
+  /* ── Node card ── */
+  .node {
+    width: var(--node-w);
+    background: var(--node-hover);
+    border: 1.5px solid var(--warm-tan);
+    border-radius: 8px;
+    padding: 14px 16px 12px;
+    cursor: default;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s, transform 0.2s;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 2px 10px var(--shadow);
+  }
+  .node:hover {
+    border-color: var(--deep-brown);
+    box-shadow: 0 6px 24px var(--shadow);
+    background: #fff;
+    transform: translateY(-2px);
+  }
+  .node .node-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--bark);
+    line-height: 1.25;
+  }
+  .node .node-years {
+    font-size: 0.72rem;
+    color: var(--warm-tan);
+    letter-spacing: 0.08em;
+    margin-top: 3px;
+  }
+  .node .node-note {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.8rem;
+    color: var(--moss);
+    margin-top: 5px;
+    line-height: 1.3;
+  }
+  /* "You" badge */
+  .node.self {
+    border-color: var(--moss);
+    background: linear-gradient(135deg, #f5f0e8, #eef4ea);
+  }
+  .node.self .node-name { color: var(--moss); }
+
+  /* Couple bracket */
+  .couple {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .couple-divider {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: var(--warm-tan);
+    padding: 0 4px;
+    margin-top: -4px;
+    user-select: none;
+  }
+
+  /* Spouse / sibling note */
+  .node.spouse { border-style: dashed; }
+
+  /* ── Add node button ── */
+  .add-node {
+    width: var(--node-w);
+    border: 1.5px dashed var(--sage);
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: var(--sage);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    background: transparent;
+  }
+  .add-node:hover { border-color: var(--moss); color: var(--moss); }
+  .add-node svg { flex-shrink: 0; }
+
+  /* ── Legend ── */
+  footer {
+    max-width: 520px;
+    margin: 70px auto 0;
+    text-align: center;
+    color: var(--warm-tan);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    line-height: 2;
+  }
+  footer strong { color: var(--deep-brown); }
+
+</style>
+</head>
+<body>
+
+<!-- Photo preview panel (fixed, right side) -->
+<div id="photo-preview">
+  <img id="preview-img" src="" alt="Family photo">
+  <div class="photo-name" id="preview-name"></div>
+  <div class="photo-years" id="preview-years"></div>
+</div>
+
+<header>
+  <h1>The <em>Family</em> Tree</h1>
+  <div class="subtitle">Roots &amp; Branches</div>
+  <div class="header-rule"><span>❧</span></div>
+</header>
+
+<!--
+  ============================================================
+  HOW TO ADD MORE NODES
+  ============================================================
+  Each person is a <div class="node"> element.
+  Copy any existing node and update:
+    data-photo  → filename in the same folder as this HTML file
+    data-name   → full name (shown in the photo panel)
+    data-years  → birth–death years (shown in the photo panel)
+    .node-name  → display name in the card
+    .node-years → brief year range in the card
+    .node-note  → optional italic detail (hometown, etc.)
+
+  Oldest generations are at the TOP; the youngest is at the BOTTOM.
+
+  To add a new (older) generation: add a new .generation block at the
+  very TOP of the .tree div, followed by a .connector div below it.
+
+  Connector lines are drawn purely with CSS on .connector divs.
+  ============================================================
+-->
+
+<div class="tree">
+
+  <!-- ══════════════ 2× GREAT-GRANDPARENTS ══════════════ -->
+  <div class="generation">
+    <div class="gen-label">2× Great-Grandparents</div>
+    <div class="gen-row">
+
+      <!-- Pair 1 — Add more pairs by copying the pattern below -->
+      <div class="node"
+           data-photo="photo_2ggf1.jpg"
+           data-name="2× Great-Grandfather"
+           data-years="1875 – 1940">
+        <div class="node-name">2× Great-Grandfather</div>
+        <div class="node-years">1875 – 1940</div>
+        <div class="node-note">Ireland → Ohio</div>
+      </div>
+
+      <div class="node"
+           data-photo="photo_2ggm1.jpg"
+           data-name="2× Great-Grandmother"
+           data-years="1878 – 1948">
+        <div class="node-name">2× Great-Grandmother</div>
+        <div class="node-years">1878 – 1948</div>
+        <div class="node-note">Ireland → Ohio</div>
+      </div>
+
+      <!-- Pair 2 -->
+      <div class="node"
+           data-photo="photo_2ggf2.jpg"
+           data-name="2× Great-Grandfather"
+           data-years="1872 – 1935">
+        <div class="node-name">2× Great-Grandfather</div>
+        <div class="node-years">1872 – 1935</div>
+        <div class="node-note">Germany → PA</div>
+      </div>
+
+      <div class="node"
+           data-photo="photo_2ggm2.jpg"
+           data-name="2× Great-Grandmother"
+           data-years="1876 – 1942">
+        <div class="node-name">2× Great-Grandmother</div>
+        <div class="node-years">1876 – 1942</div>
+        <div class="node-note">Germany → PA</div>
+      </div>
+
+      <!-- Pair 3 -->
+      <div class="node"
+           data-photo="photo_2ggf3.jpg"
+           data-name="2× Great-Grandfather"
+           data-years="1870 – 1930">
+        <div class="node-name">2× Great-Grandfather</div>
+        <div class="node-years">1870 – 1930</div>
+        <div class="node-note">Wales → Missouri</div>
+      </div>
+
+      <div class="node"
+           data-photo="photo_2ggm3.jpg"
+           data-name="2× Great-Grandmother"
+           data-years="1873 – 1945">
+        <div class="node-name">2× Great-Grandmother</div>
+        <div class="node-years">1873 – 1945</div>
+        <div class="node-note">Wales → Missouri</div>
+      </div>
+
+      <!-- Pair 4 -->
+      <div class="node"
+           data-photo="photo_2ggf4.jpg"
+           data-name="2× Great-Grandfather"
+           data-years="1868 – 1928">
+        <div class="node-name">2× Great-Grandfather</div>
+        <div class="node-years">1868 – 1928</div>
+        <div class="node-note">Virginia → TN</div>
+      </div>
+
+      <div class="node"
+           data-photo="photo_2ggm4.jpg"
+           data-name="2× Great-Grandmother"
+           data-years="1871 – 1940">
+        <div class="node-name">2× Great-Grandmother</div>
+        <div class="node-years">1871 – 1940</div>
+        <div class="node-note">Virginia → TN</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- connector: 2×GG → Great-Grandparents -->
+  <div class="connector">
+    <div class="h-bar" style="--bar-left:calc(50% - 620px); --bar-right:calc(50% - 620px);"></div>
+    <div class="drop" style="--drop-x:calc(50% - 618px);"></div>
+    <div class="drop" style="--drop-x:calc(50% - 424px);"></div>
+    <div class="drop" style="--drop-x:calc(50% - 228px);"></div>
+    <div class="drop" style="--drop-x:calc(50% - 35px);"></div>
+    <div class="drop" style="--drop-x:calc(50% + 160px);"></div>
+    <div class="drop" style="--drop-x:calc(50% + 355px);"></div>
+    <div class="drop" style="--drop-x:calc(50% + 550px);"></div>
+  </div>
+
+  <!-- ══════════════ GREAT-GRANDPARENTS ══════════════ -->
+  <div class="generation">
+    <div class="gen-label">Great-Grandparents</div>
+    <div class="gen-row">
+
+      <div class="node"
+           data-photo="photo_ggf1.jpg"
+           data-name="Great-Grandfather (Pat. side)"
+           data-years="1905 – 1970">
+        <div class="node-name">Great-Grandfather (Pat. side)</div>
+        <div class="node-years">1905 – 1970</div>
+        <div class="node-note">Cleveland, OH</div>
+      </div>
+
+      <div class="node"
+           data-photo="photo_ggm1.jpg"
+           data-name="Great-Grandmother (Pat. side)"
+           data-years="1908 – 1975">
+        <div class="node-name">Great-Grandmother (Pat. side)</div>
+        <div class="node-years">1908 – 1975</div>
+        <div class="node-note">Cleveland, OH</div>
+      </div>
+
+      <div class="node"
+           data-photo="photo_ggf2.jpg"
+           data-name="Great-Grandfather (Pat. maternal)"
+           data-years="1900 – 1962">
+        <div class="node-name">Great-Grandfather (Pat. maternal)</div>
+        <div class="node-years">1900 – 1962</div>
+        <div class="node-note">Pittsburgh, PA</div>
+      </div>
+
+      <div class="node"
+           data-photo="photo_ggm2.jpg"
+           data-name="Great-Grandmother (Pat. maternal)"
+           data-years="1903 – 1980">
+        <div class="node-name">Great-Grandmother (Pat. maternal)</div>
+        <div class="node-years">1903 – 1980</div>
+        <div class="node-note">Pittsburgh, PA</div>
+      </div>
+
+      <div class="node"
+           data-photo="photo_ggf3.jpg"
+           data-name="James W Erby"
+           data-years="b. - d.">
+        <div class="node-name">James W Erby</div>
+        <div class="node-years">b. - d.</div>
+        <div class="node-note">City, State</div>
+      </div>
+
+      <div class="node"
+           data-photo="photo_ggm3.jpg"
+           data-name="Addie M Bransom"
+           data-years="b. - d.">
+        <div class="node-name">Addie M Bransom</div>
+        <div class="node-years">b. - d.</div>
+        <div class="node-note">City, State</div>
+      </div>
+
+      <div class="node"
+           data-photo="photo_ggf4.jpg"
+           data-name="Great-Grandfather (Mat. maternal)"
+           data-years="1898 – 1955">
+        <div class="node-name">Great-Grandfather (Mat. maternal)</div>
+        <div class="node-years">1898 – 1955</div>
+        <div class="node-note">Nashville, TN</div>
+      </div>
+
+      <div class="node"
+           data-photo="photo_ggm4.jpg"
+           data-name="Great-Grandmother (Mat. maternal)"
+           data-years="1901 – 1965">
+        <div class="node-name">Great-Grandmother (Mat. maternal)</div>
+        <div class="node-years">1901 – 1965</div>
+        <div class="node-note">Nashville, TN</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- connector: Great-Grandparents → Grandparents -->
+  <div class="connector">
+    <div class="h-bar" style="--bar-left: calc(50% + 100px); --bar-width: 96px;"></div>
+    <div class="stem" style="--stem-x: calc(50% + 195px);"></div>
+    <div class="drop" style="--drop-x:calc(50% + 100px);"></div>   
+    <div class="h-bar" style="--bar-left: calc(50% + 300px); --bar-width: 280px;"></div> 
+    <div class="drop" style="--drop-x:calc(50% + 300px);"></div>
+    <div class="stem" style="--stem-x: calc(50% + 580px);"></div>
+
+  </div>
+
+  <!-- ══════════════ GRANDPARENTS ══════════════ -->
+  <div class="generation">
+    <div class="gen-label">Grandparents</div>
+    <div class="gen-row">
+
+      <div class="node"
+           data-photo="photo_gf_paternal.jpg"
+           data-name="Paternal Grandfather"
+           data-years="19xx - 19xx">
+        <div class="node-name">George's Father</div>
+        <div class="node-years">19xx - 19xx</div>
+        <div class="node-note">Detroit, MI</div>
+      </div>
+
+      <div class="node"
+           data-photo="photo_gm_paternal.jpg"
+           data-name="Paternal Grandmother"
+           data-years="19xx - 19xx">
+        <div class="node-name">George's Mother</div>
+        <div class="node-years">19xx - 19xx</div>
+        <div class="node-note">Detroit, MI</div>
+      </div>
+
+      <div class="node"
+           data-photo="billy.png"
+           data-name="Billy Wayne Erby"
+           data-years="19xx – 19xx">
+        <div class="node-name">Billy Wayne Erby</div>
+        <div class="node-years">19xx - 19xx</div>
+        <div class="node-note">St. Louis, MO</div>
+      </div>
+
+      <div class="node"
+           data-photo="nelda.png"
+           data-name="Nelda Ann Boykin"
+           data-years="19xx">
+        <div class="node-name">Nelda Ann Boykin</div>
+        <div class="node-years">19xx</div>
+        <div class="node-note">St. Louis, MO</div>
+      </div>
+
+    </div>
+  </div>
+
+<!-- connector: Grandparents → Parents -->
+<div class="connector"">
+
+  <div class="stem" style="--stem-x: calc(50% - 195px);"></div>
+  <div class="stem" style="--stem-x: calc(50% + 195px);"></div>
+<!-- left bar: starts under left grandparent, wide enough to reach right grandparent -->
+<div class="h-bar" style="--bar-left: calc(50% - 300px); --bar-width: 200px;"></div>
+<!-- right bar -->
+<div class="h-bar" style="--bar-left: calc(50% + 100px); --bar-width: 200px;"></div>
+
+  <!-- Drops for left pair -->
+  <div class="drop" style="--drop-x: calc(50% - 300px);"></div>
+  <div class="drop" style="--drop-x: calc(50% - 100px);"></div>
+  <!-- Drops for right pair -->
+  <div class="drop" style="--drop-x: calc(50% + 100px);"></div>
+  <div class="drop" style="--drop-x: calc(50% + 300px);"></div>
+</div>
+
+  <!-- ══════════════ PARENTS ══════════════ -->
+  <div class="generation">
+    <div class="gen-label">Parents</div>
+    <div class="gen-row">
+
+      <!-- Father -->
+      <div class="node"
+           data-photo="photo_father.jpg"
+           data-name="George Vanderzwart"
+           data-years="19xx">
+        <div class="node-name">George Vanderzwart</div>
+        <div class="node-years">19xx</div>
+        <div class="node-note">Dallas, TX</div>
+      </div>
+
+      <!-- Mother -->
+      <div class="node"
+           data-photo="photo_mother.jpg"
+           data-name="Julie Erby"
+           data-years="b. 19xx">
+        <div class="node-name">Julie Erby</div>
+        <div class="node-years">b. 19xx</div>
+        <div class="node-note">Dallas, TX</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- connector: Parents → current generation -->
+  <div class="connector">
+  <div class="stem" style="--stem-x: calc(50% );"></div>
+  
+    <div class="h-bar" style="--bar-left:calc(50% - 300px);  --bar-width: 600px"></div>
+    <div class="drop" style="--drop-x:calc(50% - 300px);"></div>
+    <div class="drop" style="--drop-x:calc(50% + 300px);"></div>
+    <div class="drop" style="--drop-x:calc(50% - 110px);"></div>
+    <div class="drop" style="--drop-x:calc(50% + 110px);"></div>
+  </div>
+
+  <!-- ══════════════ CURRENT GENERATION ══════════════ -->
+  <div class="generation">
+    <div class="gen-label">Current Generation</div>
+    <div class="gen-row">
+
+      <div class="node self"
+           data-photo="joseph.png"
+           data-name="Joseph Vanderzwart"
+           data-years="b. 1986">
+        <div class="node-name">Joseph Vanderzwart</div>
+        <div class="node-years">b. 1986</div>
+        <div class="node-note">Dallas, TX</div>
+      </div>
+      <div class="node self"
+           data-photo="photo_you.jpg"
+           data-name="Jaclyn Vanderzwart"
+           data-years="b. 1988">
+        <div class="node-name">Jaclyn Vanderzwart</div>
+        <div class="node-years">b. 1988</div>
+        <div class="node-note">Dallas, TX</div>
+      </div>
+      <div class="node self"
+           data-photo="photo_you.jpg"
+           data-name="Jared Vanderzwart"
+           data-years="b. 1990">
+        <div class="node-name">Jared Vanderzwart</div>
+        <div class="node-years">b. 1990</div>
+        <div class="node-note">Dallas, TX</div>
+      </div>
+      <div class="node self"
+           data-photo="photo_you.jpg"
+           data-name="Jenna Vanderzwart"
+           data-years="b. 1993">
+        <div class="node-name">Jenna Vanderzwart</div>
+        <div class="node-years">b. 1993</div>
+        <div class="node-note">Dallas, TX</div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- .tree -->
+
+<script>
+  // ── Photo preview on hover ──────────────────────────────────────
+  const preview   = document.getElementById('photo-preview');
+  const prevImg   = document.getElementById('preview-img');
+  const prevName  = document.getElementById('preview-name');
+  const prevYears = document.getElementById('preview-years');
+
+  document.querySelectorAll('.node').forEach(node => {
+    node.addEventListener('mouseenter', () => {
+      const photo = node.dataset.photo || 'placeholder.jpg';
+      const name  = node.dataset.name  || node.querySelector('.node-name')?.textContent || '';
+      const years = node.dataset.years || '';
+
+      prevImg.src      = photo;
+      prevName.textContent  = name;
+      prevYears.textContent = years;
+
+      // Fallback if image fails to load
+      prevImg.onerror = () => {
+        prevImg.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect width='200' height='200' fill='%23f0e6d3'/%3E%3Ctext x='50%25' y='46%25' font-family='Georgia' font-size='13' fill='%23c9a97a' text-anchor='middle' dominant-baseline='middle'%3EPhoto%3C/text%3E%3Ctext x='50%25' y='58%25' font-family='Georgia' font-size='11' fill='%23c9a97a' text-anchor='middle' dominant-baseline='middle'%3Enot found%3C/text%3E%3C/svg%3E";
+      };
+
+      preview.classList.add('visible');
+    });
+
+    node.addEventListener('mouseleave', () => {
+      preview.classList.remove('visible');
+    });
+  });
+
+  // ── Smooth entrance animation ───────────────────────────────────
+  const nodes = document.querySelectorAll('.node');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationDelay = `${(i % 8) * 60}ms`;
+        entry.target.classList.add('appeared');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  nodes.forEach(n => observer.observe(n));
+</script>
+
+<style>
+  /* ── Entrance animation ── */
+  .node {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease,
+                border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  .node.appeared {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Override hover so it stacks on top of animation */
+  .node.appeared:hover {
+    transform: translateY(-2px);
+  }
+</style>
+
+</body>
+</html>

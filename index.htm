@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="UTF-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Joseph Vanderzwart</title>
+      <link rel="stylesheet" href="css/common.css" />
+      <link rel="stylesheet" href="css/responsive.css" />
+	  <link rel="icon" type="image/png" href="favicon.png">
+	  <script data-ad-client="ca-pub-2226343351597179" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  </head>
+
+  <body>
+     <header>
+      <div id="banner" role="banner"></div>
+      <h1>josephvanderzwart.com</h1>
+    </header>
+    <nav class="menu">
+	  <ul class="menu-list">
+		<li class="menu-item">
+		  <a class="menu-item-link" href="projects.htm" alt="Projects">Projects</a>
+		</li>
+		<li class="menu-item">
+		  <a class="menu-item-link" href="https://www.github.com/joseph243" alt="Github" target="_blank">My Github Profile</a>
+		</li>
+	    <li class="menu-item">
+		  <a class="menu-item-link" href="pictures.htm" alt="Pictures">Pictures</a>
+		</li>
+		<li class="menu-item">
+		  <button class="menu-item-link expander" href="   " alt="Contact" target="_blank">My Social Media / Contact Information&nbsp;&nbsp;&nbsp;&nbsp; >></button>
+		    <span class="expandable">
+			  <br />
+			  <a class="sublink" href=" mailto:joseph@josephvanderzwart.com" alt="email" target="_blank">joseph@josephvanderzwart.com</a>			
+			  <a class="sublink" href="https://www.linkedin.com/in/joseph-vanderzwart-804919165/" alt="LinkedIn" target="_blank">LinkedIn</a>
+			  <br />
+			  <br />
+			</span>
+		</li>
+      </ul>
+	</nav>
+
+
+    <p id = "padtext" align="center">Hi, I'm Joseph Vanderzwart.  I am a QA Automation Developer, working with Java and Selenium and LeanFT.
+       I've also worked in IT/Technical Support and Personal Banking/Banking Operations Support.  
+	   I've created this website to share my various projects and photos.</p>
+
+
+<script>  /*Expandable Buttons*/
+var exp = document.getElementsByClassName("expander");
+var i;
+
+for (i = 0; i < exp.length; i++) {
+  exp[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var expander = this.nextElementSibling;
+    if (expander.style.display === "block") {
+      expander.style.display = "none";
+    } else {
+      expander.style.display = "block";
+    }
+  });
+}
+</script>	
+	
+  </body>
+</html>
