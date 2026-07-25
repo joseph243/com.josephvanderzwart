@@ -66,14 +66,74 @@
       text-align: center; width: 100%;
     }
 
+    .password-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 1rem 0;
+      width: 100%;
+    }
+
+    .password-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: #00ff66;
+      letter-spacing: 1px;
+    }
+
+    .password-input {
+      background-color: #000000;
+      color: #00ff66;
+      border: 1px solid #00ff66;
+      padding: 0.5rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      text-align: center;
+      outline: none;
+      box-shadow: 0 0 5px rgba(0, 255, 102, 0.2);
+      border-radius: 0;
+      width: 100%;
+      max-width: 250px;
+    }
+
+    .password-input:focus {
+      box-shadow: 0 0 10px rgba(0, 255, 102, 0.6);
+      background-color: #050505;
+    }
+
   </style>
 </head>
 <body>
   <h1>HomeBot Dashboard</h1>
   <div class="dashboard-grid">
+
+
     <!-- Example Module -->
     <div class="device-card">
-      <h2 class="device-title">[SYS_NODE_01] Camera 1</h2>
+      <h2 class="device-title">[NODE_00] HOMEBOT</h2>
+      <div class="device-stats">
+        <div>TEMP_VAL : 68.1 F</div>
+        <div>DOOR_ST  : CLOSED</div>
+        <div>Uptime   : 142h 12m</div>
+      </div>
+        <div class="password-container">
+          <label for="password" class="password-label">[AUTH]</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            class="password-input" 
+            placeholder="ENTER PASSWORD" 
+            autocomplete="current-password"
+          >
+        </div>
+    </div>
+    <!-- End Module -->
+
+    <!-- Example Module -->
+    <div class="device-card">
+      <h2 class="device-title">[NODE_01] Camera 1</h2>
       <div class="device-stats">
         <div>ACTIVE       : FALSE</div>
         <div>LAST_MOTION  : 2026-07-24 11:50:33</div>
@@ -91,7 +151,7 @@
 
     <!-- Example Module -->
     <div class="device-card">
-      <h2 class="device-title">[SYS_NODE_02] Light 1</h2>
+      <h2 class="device-title">[NODE_02] Light 1</h2>
       <div class="device-stats">
         <div>ACTIVE : FALSE</div>
         <div>COLOR  : RED</div>
@@ -111,27 +171,7 @@
 
     <!-- Example Module -->
     <div class="device-card">
-      <h2 class="device-title">[SYS_NODE_01] Garage</h2>
-      <div class="device-stats">
-        <div>TEMP_VAL : 68.1 F</div>
-        <div>DOOR_ST  : CLOSED</div>
-        <div>Uptime   : 142h 12m</div>
-      </div>
-      <div class="button-subpanel">
-        <button>CMD 1</button>
-        <button>CMD 2</button>
-        <button>CMD 3</button>
-        <button>CMD 4</button>
-        <button>CMD 5</button>
-        <button>CMD 6</button>
-        <button>CMD 7</button>
-      </div>
-    </div>
-    <!-- End Module -->
-
-    <!-- Example Module -->
-    <div class="device-card">
-      <h2 class="device-title">[SYS_NODE_01] Garage</h2>
+      <h2 class="device-title">[NODE_01] Garage</h2>
       <div class="device-stats">
         <div>TEMP_VAL : 68.1 F</div>
         <div>DOOR_ST  : CLOSED</div>
