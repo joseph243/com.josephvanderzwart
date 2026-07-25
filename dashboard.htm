@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeBot Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', monospace; }
+    body { background-color: #000000; color: #00ff66; padding: 1rem; }
+    
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    @media (min-width: 768px) {
+      .dashboard-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .device-card {
+      background: #050505;
+      border: 1px solid #00ff66;
+      box-shadow: 0 0 5px rgba(0, 255, 102, 0.2);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .device-title { font-size: 1.1rem; text-transform: uppercase; border-bottom: 1px dashed #00ff66; padding-bottom: 0.4rem; }
+    .device-stats { font-size: 0.85rem; line-height: 1.5; }
+    .device-stats div { white-space: pre; }
+    
+    .button-subpanel {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.3rem;
+      border-top: 1px solid #00ff66;
+      padding-top: 0.5rem;
+    }
+    .button-subpanel button {
+      background: #000;
+      color: #00ff66;
+      border: 1px solid #00ff66;
+      padding: 0.3rem;
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
+
+    .button-subpanel button:active {
+      background: #00ff66;
+      color: #000000;
+    }
+
+    @media (hover: hover) {
+    .button-subpanel button:hover {
+      background: #00ff66;
+      color: #000000;
+    }
+    }
+
+    .button-subpanel button:nth-child(7) { grid-column: span 3; }
+
+    h1 {
+      text-align: center; width: 100%;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>HomeBot Dashboard</h1>
+  <div class="dashboard-grid">
+    <!-- Example Module -->
+    <div class="device-card">
+      <h2 class="device-title">[SYS_NODE_01] Camera 1</h2>
+      <div class="device-stats">
+        <div>ACTIVE       : FALSE</div>
+        <div>LAST_MOTION  : 2026-07-24 11:50:33</div>
+        <div>UPTIME       : 142h 12m</div>
+      </div>
+      <div class="button-subpanel">
+        <button>START</button>
+        <button>SLEEP</button>
+        <button>SNAPSHOT</button>
+        <button>STATUS</button>
+        <button>STOP</button>
+      </div>
+    </div>
+    <!-- End Module -->
+
+    <!-- Example Module -->
+    <div class="device-card">
+      <h2 class="device-title">[SYS_NODE_02] Light 1</h2>
+      <div class="device-stats">
+        <div>ACTIVE : FALSE</div>
+        <div>COLOR  : RED</div>
+        <div>UPTIME : 142h 12m</div>
+      </div>
+      <div class="button-subpanel">
+        <button>⚪</button>
+        <button>🟠</button>
+        <button>🕯</button>
+        <button>🔴</button>
+        <button>🟢</button>
+        <button>🔵</button>
+        <button>TOGGLE POWER</button>
+      </div>
+    </div>
+    <!-- End Module -->
+
+    <!-- Example Module -->
+    <div class="device-card">
+      <h2 class="device-title">[SYS_NODE_01] Garage</h2>
+      <div class="device-stats">
+        <div>TEMP_VAL : 68.1 F</div>
+        <div>DOOR_ST  : CLOSED</div>
+        <div>Uptime   : 142h 12m</div>
+      </div>
+      <div class="button-subpanel">
+        <button>CMD 1</button>
+        <button>CMD 2</button>
+        <button>CMD 3</button>
+        <button>CMD 4</button>
+        <button>CMD 5</button>
+        <button>CMD 6</button>
+        <button>CMD 7</button>
+      </div>
+    </div>
+    <!-- End Module -->
+
+    <!-- Example Module -->
+    <div class="device-card">
+      <h2 class="device-title">[SYS_NODE_01] Garage</h2>
+      <div class="device-stats">
+        <div>TEMP_VAL : 68.1 F</div>
+        <div>DOOR_ST  : CLOSED</div>
+        <div>Uptime   : 142h 12m</div>
+      </div>
+      <div class="button-subpanel">
+        <button>CMD 1</button>
+        <button>CMD 2</button>
+        <button>CMD 3</button>
+        <button>CMD 4</button>
+        <button>CMD 5</button>
+        <button>CMD 6</button>
+        <button>CMD 7</button>
+      </div>
+    </div>
+    <!-- End Module -->
+
+
+  </div>
+</body>
+</html>
